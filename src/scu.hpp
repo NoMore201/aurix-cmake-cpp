@@ -16,8 +16,8 @@ struct CpuEndinitGuard {
 
     Password password;
 
-    explicit CpuEndinitGuard(Password p)
-        : password(p)
+    explicit CpuEndinitGuard(Password pwd)
+        : password(pwd)
     {
         clear_cpu_endinit(password);
     }
@@ -29,4 +29,4 @@ struct CpuEndinitGuard {
 };
 
 
-}
+} // namespace Hal::Scu
