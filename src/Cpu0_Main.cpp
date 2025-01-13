@@ -1,6 +1,8 @@
 
 #include "gpio.hpp"
+#include "intrinsics.hpp"
 #include "scu.hpp"
+#include "timer.hpp"
 
 #include <array>
 
@@ -40,8 +42,13 @@ void core0_main(void)
 
     Hal::Gpio::configure(led_list);
 
+    u64 start_time = Hal::Timer::now();
+
     while (true)
     {
+        if (Hal::Timer::elapsed(std::chrono::milliseconds(500), start_time)) {
+            Ifx::debug();
+        }
     }
 }
 }

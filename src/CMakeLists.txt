@@ -17,6 +17,7 @@ add_executable(
   Cpu0_Main.cpp
   gpio.cpp
   scu.cpp
+  timer.cpp
 )
 target_link_libraries(AurixExecutable PRIVATE InfineonLib)
 target_include_directories(AurixExecutable PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
