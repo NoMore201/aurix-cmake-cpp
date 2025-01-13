@@ -26,6 +26,7 @@ void _init(void)
 void core0_main(void)
 {
     Hal::Scu::disable_cpu_watchdog(Hal::Scu::get_cpu_password());
+    Hal::Scu::disable_safety_watchdog(Hal::Scu::get_safety_password());
 
     Hal::Gpio::configure(led);
 
