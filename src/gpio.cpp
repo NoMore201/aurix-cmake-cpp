@@ -1,6 +1,7 @@
 #include "gpio.hpp"
 #include "error.hpp"
 #include "intrinsics.hpp"
+#include "scu.hpp"
 
 #include <IfxPort_reg.h>
 
@@ -35,6 +36,8 @@ Ifx_P& get_port(u8 port)
             return MODULE_P32;
         case 33:
             return MODULE_P33;
+        case 34:
+            return MODULE_P34;
         default:
             VERIFY_NOT_REACHED();
     }
@@ -50,6 +53,8 @@ void Hal::Gpio::configure(const Pin& pin)
     const auto pdr_shift  = (pin.number % 8U) * 4U;
     const auto iocr_index = pin.number / 4U;
     const auto iocr_shift = (pin.number % 4) * 8U;
+
+    Scu::CpuEndinitGuard guard{Scu::get_cpu_password()};
 
     // write pad driver
     volatile auto* pdr_list = &port.PDR0.U;
