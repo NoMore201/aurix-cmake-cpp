@@ -5,18 +5,27 @@
 #include <chrono>
 #include <ratio>
 
-namespace Hal::Timer {
+namespace Hal::Timer
+{
 
-// TODO: define clock
-using Duration = std::chrono::duration<u64, std::nano>;
+template <typename Period> using Duration = std::chrono::duration<u64, Period>;
 
-// TODO: refactor when clock implemented
-u64 now();
+static constexpr std::intmax_t cpu_clock = 100000000;
 
-bool elapsed(auto duration, u64 start_time) {
-    auto nanoseconds = std::chrono::duration_cast<std::chrono::nanoseconds>(duration);
-    auto current_time = now();
-    return current_time - start_time > static_cast<u64>(nanoseconds.count());
-}
+u64 get_stm0_timestamp();
+
+struct Clock
+{
+    using rep        = u64;
+    using period     = std::ratio<1, cpu_clock>;
+    using duration   = Duration<period>; // 10ns which is period for 100 Mhz clock speed
+    using time_point = std::chrono::time_point<Hal::Timer::Clock>;
+
+    static time_point now() noexcept
+    {
+        u64 timestamp = get_stm0_timestamp();
+        return time_point{duration{timestamp}};
+    }
+};
 
 } // namespace Hal::Timer

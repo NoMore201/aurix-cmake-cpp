@@ -37,16 +37,19 @@ void _init(void)
 
 void core0_main(void)
 {
+    using Clock = Hal::Timer::Clock;
     Hal::Scu::disable_cpu_watchdog(Hal::Scu::get_cpu_password());
     Hal::Scu::disable_safety_watchdog(Hal::Scu::get_safety_password());
 
     Hal::Gpio::configure(led_list);
 
-    u64 start_time = Hal::Timer::now();
+    const auto start_time = Clock::now();
 
     while (true)
     {
-        if (Hal::Timer::elapsed(std::chrono::milliseconds(500), start_time)) {
+        const auto current_time = Clock::now();
+
+        if (current_time - start_time > std::chrono::milliseconds(900)) {
             Ifx::debug();
         }
     }
